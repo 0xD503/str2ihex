@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-## TODO: add to str2ihex() 8/16/32/64 bit words support with hex/bin/oct representation
+## TODO: add to str2ihex() hex/bin/oct representation support
 import sys
 import argparse
 from intelhex import IntelHex
