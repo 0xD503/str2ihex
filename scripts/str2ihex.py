@@ -50,9 +50,12 @@ def str2ihex(in_list):
     words_num = int(str_len / 2)
     intel_hex = IntelHex()
     for idx, line in enumerate(in_list):
-        is_valid_number(line, 16)
-        intel_hex[idx * words_num:idx * words_num + words_num] = list(bytearray.fromhex(line))
-    return intel_hex
+        status = is_valid_number(line, 16)
+        if status:
+            intel_hex[idx * words_num:idx * words_num + words_num] = list(bytearray.fromhex(line))
+        else:
+            break
+    return status, intel_hex
 
 
 if __name__ == "__main__":
@@ -70,6 +73,7 @@ if __name__ == "__main__":
 
     ## Start conversion
     lines = read_lines(args.input)
-    ihex = str2ihex(lines)
-    ihex.write_hex_file(args.output)
+    status, ihex = str2ihex(lines)
+    if status:
+        ihex.write_hex_file(args.output)
     sys.exit()
