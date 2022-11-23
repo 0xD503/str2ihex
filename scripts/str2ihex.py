@@ -6,6 +6,34 @@ import argparse
 from intelhex import IntelHex
 
 
+input_format = "Expected input file format:\n"\
+    "  NOTE: All lines in a file should have the same length. Base prefixes \n"\
+    "        like 0x/0b are optional\n"\
+    "\n"\
+    "    - hex, 64-bit:\n"\
+    "    DEADBEEFCAFEFEED\n"\
+    "    0123456789ABCDEF\n"\
+    "    ...\n"\
+    "\n"\
+    "\n"\
+    "    - hex, 16-bit, with base prefix:\n"\
+    "    0x0123\n"\
+    "    0xABCD\n"\
+    "    0x4444\n"\
+    "    ...\n"\
+    "\n"\
+    "\n"\
+    "    - bin, 8-bit:\n"\
+    "    01001101\n"\
+    "    11111011\n"\
+    "    00000000\n"\
+    "    11111111\n"\
+    "    10101011\n"\
+    "\n"\
+    "\n"\
+    "    - and the same principle for all others: bin/oct/dec/hex 8/16/32/64-bits\n"
+
+
 def is_valid_number(string, encoding=16):
     """Returns True if string is valid character-coded number.
 
@@ -62,10 +90,10 @@ if __name__ == "__main__":
     ## Parse arguments
     parser = argparse.ArgumentParser(
         prog = "str2ihex",
-        description = "Convert character-coded bin/hex/oct numbers to Intel"\
+        description = "Convert character-coded bin/hex/oct numbers to Intel "\
         "Hex format",
-        #epilog = "Possible input file formats:\n  - character-coded hexadecimal numbers:"
-        epilog = ""
+        epilog = input_format,
+        formatter_class = argparse.RawTextHelpFormatter
     )
     parser.add_argument('-i', "--input", required=True)
     parser.add_argument('-o', "--output", required=True)
