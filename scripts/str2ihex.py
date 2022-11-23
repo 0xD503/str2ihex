@@ -19,7 +19,7 @@ def is_valid_number(string, encoding=16):
         status = True
     except ValueError as excpt:
         print("ValueError EXCEPTION:", excpt)
-        sys.exit()
+        #sys.exit()
     return status
 
 def read_lines(in_file):
