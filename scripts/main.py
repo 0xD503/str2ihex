@@ -41,7 +41,12 @@ def str2ihex(in_list):
     Keyword arguments:
     in_list -- list of strings to process
     """
-    str_len = len(in_list[0])
+    #str_len = len(in_list[0])
+    try:
+        str_len = len(in_list[0])
+    except IndexError as excpt:
+       print("IndexError EXCEPTION:", excpt)
+       sys.exit()
     words_num = int(str_len / 2)
     intel_hex = IntelHex()
     for idx, line in enumerate(in_list):
