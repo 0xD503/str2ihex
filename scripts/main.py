@@ -26,8 +26,8 @@ from intelhex import IntelHex
 #         return lines_lst
 
 #     def str2ihex(in_list):
-#         """Takes a list of numbers in character-coded binary numbers representation
-#         and returns filled instance of IntelHex() formatter.
+#         """Takes a list of numbers in character-coded binary numbers
+#         representation and returns filled instance of IntelHex() formatter.
 
 #         Keyword arguments:
 #         in_list -- list of strings to process
@@ -56,8 +56,8 @@ def read_lines(in_file):
     return lines_lst
 
 def str2ihex(in_list):
-    """Takes a list of numbers in character-coded binary numbers representation
-    and returns filled instance of IntelHex() formatter.
+    """Takes a list of numbers in character-coded bin/hex/oct numbers
+    representation and returns filled instance of IntelHex() formatter.
 
     Keyword arguments:
     in_list -- list of strings to process
@@ -75,21 +75,20 @@ def str2ihex(in_list):
 
 
 if __name__ == "__main__":
+    ## Parse arguments
     parser = argparse.ArgumentParser(
         prog = "str2ihex",
-        description = "usage: OPTION ARG",
-        epilog = "-i -- input file specifier"\
-                 "-o -- output file specifier"
+        description = "Convert character-coded bin/hex/oct numbers to Intel"\
+        "Hex format",
+        #epilog = "Possible input file formats:\n  - character-coded hexadecimal numbers:"
+        epilog = ""
     )
-    parser.add_argument('-i', "--input-file")
-    parser.add_argument('-o', "--output-file")
-    #args = parser.parse_args()
+    parser.add_argument('-i', "--input", required=True)
+    parser.add_argument('-o', "--output", required=True)
+    args = parser.parse_args()
 
-    if len(sys.argv) != 3:
-        usage(sys.argv[0])
-        sys.exit()
-
-    lines = read_lines(sys.argv[1])
+    ## Start conversion
+    lines = read_lines(args.input)
     ihex = str2ihex(lines)
-    ihex.write_hex_file(sys.argv[2])
+    ihex.write_hex_file(args.output)
     sys.exit()
