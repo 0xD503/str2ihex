@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 
-## TODO: add to str2ihex() hex/bin/oct/dec representation support
+## TODO: add to str2ihex() bin representation support and test appropriate test cases
+## TODO: write full test
+## TODO: implement setup.py file
+## TODO: Add README.md with brief docs
+## TODO: Add LICENSE (GPL v3)
+## TODO: Truncate base prefix (0x/0b)
 import sys
 import argparse
 from intelhex import IntelHex
@@ -62,14 +67,14 @@ def read_lines(in_file):
             lines_lst.append(line.rstrip())
     return lines_lst
 
-def str2ihex(in_list):
+def str2ihex(in_list, base):
     """Takes a list of numbers in character-coded bin/hex/oct/dec numbers
     representation and returns filled instance of IntelHex() formatter.
 
     Keyword arguments:
     in_list -- list of strings to process
+    base    -- character-coded number base
     """
-    #str_len = len(in_list[0])
     try:
         str_len = len(in_list[0])
     except IndexError as excpt:
@@ -78,12 +83,12 @@ def str2ihex(in_list):
     words_num = int(str_len / 2)
     intel_hex = IntelHex()
     for idx, line in enumerate(in_list):
-        status = is_valid_number(line, 16)
-        if status:
+        valid = is_valid_number(line, base)
+        if valid:
             intel_hex[idx * words_num:idx * words_num + words_num] = list(bytearray.fromhex(line))
         else:
             break
-    return status, intel_hex
+    return valid, intel_hex
 
 
 if __name__ == "__main__":
@@ -91,17 +96,27 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog = "str2ihex",
         description = "Convert character-coded bin/hex/oct numbers to Intel "\
-        "Hex format",
+        "HEX format",
         epilog = input_format,
         formatter_class = argparse.RawTextHelpFormatter
     )
     parser.add_argument('-i', "--input", required=True)
     parser.add_argument('-o', "--output", required=True)
+    parser.add_argument('-b', "--base", required=False)
     args = parser.parse_args()
+
+    base = int()
+    if not args.base:
+        base = 16       ## Default encoding is hex
+    else:
+        base = int(args.base)
+        if base not in (2, 16):
+            print("Wrong base. Possible base values are 2/16")
+            raise ValueError
 
     ## Start conversion
     lines = read_lines(args.input)
-    status, ihex = str2ihex(lines)
+    status, ihex = str2ihex(lines, base)
     if status:
         ihex.write_hex_file(args.output)
     sys.exit()
