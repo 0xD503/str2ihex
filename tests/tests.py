@@ -3,8 +3,8 @@
 import unittest
 
 import os, sys
-#from str2ihex import scripts.str2ihex as s2ih
-## caution: path[0] is reserved for script path (or '' in REPL)
+import filecmp as fcmp
+
 sys.path.insert(1, "scripts/")
 import str2ihex as s2ih
 
@@ -12,8 +12,8 @@ import str2ihex as s2ih
 class TestStr2HexConverter(unittest.TestCase):
     """String to Intel hex converter test suite"""
 
-    INPUT_DIR = "./tests/inputs/"
-    OUTPUT_DIR = "./out/"
+    INPUT_DIR = "tests/inputs/"
+    EXP_OUT_DIR = "tests/expected_output/"
 
     def test_number_validity(self):
         """Tests number validity checks"""
@@ -21,19 +21,21 @@ class TestStr2HexConverter(unittest.TestCase):
         self.assertTrue(s2ih.is_valid_number("DEA"))
         self.assertTrue(s2ih.is_valid_number("0xDEADC0DE"))
         self.assertFalse(s2ih.is_valid_number("0xDEADCODE"))
+        self.assertFalse(s2ih.is_valid_number("0xD1ADCODE"))
 
     def test_ihex_conversion(self):
         """Tests conversion of character-coded data to Intel Hex format"""
         directory = os.fsencode(self.INPUT_DIR)
         dir_content = os.listdir(directory)
         for f in dir_content:
-            file_name = os.fsdecode(f)
-            print(self.INPUT_DIR + file_name)
-            print(self.OUTPUT_DIR + file_name.replace(".txt", ".hex"))
-            print("=======================================================")
-            #os.system("str2ihex -i
-            ### if invalid input
-            #if (file_name.find("invalid") == 0):
+            f_name = os.fsdecode(f)
+            in_f = self.INPUT_DIR + f_name
+            exp_out_f = self.EXP_OUT_DIR + f_name.replace(".txt", ".hex")
+            out_f = "out/" + f_name.replace(".txt", ".hex")
+            if s2ih.convert_str2ihex(in_f, out_f, 16):
+                #print("Comparing {0} and {1} files...".format(exp_out_f, out_f))
+                self.assertTrue(fcmp.cmp(out_f, exp_out_f))
+
 
 
 if __name__ == "__main__":
