@@ -2,6 +2,7 @@
 
 ## TODO: add to str2ihex() bin representation support and test appropriate test cases
 ## TODO: implement setup.py file
+## TODO: implement __init__.py file
 ## TODO: Add README.md with brief docs
 ## TODO: Truncate base prefix (0x/0b/h)
 ## TODO: Add Big/Low endian variants
